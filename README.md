@@ -388,6 +388,9 @@ Current Render health response:
 }
 ```
 
+The live response also includes `revision`, the first seven characters of the
+deployed Render commit (`RENDER_GIT_COMMIT`). Local runs report `local`.
+
 Render does not provide an Ollama runtime, so the hosted deployment uses the
 deterministic fallback. That is the intended zero-crash cloud posture, and the
 UI discloses it with `CLOUD PREVIEW`, `RENDER PREVIEW`, and `AST + FALLBACK`
