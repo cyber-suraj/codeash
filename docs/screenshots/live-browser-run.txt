@@ -65,6 +65,14 @@ subprocess.run(f"echo {user_input}", shell=True)
 	
 +
 	
+import subprocess
+
+
+	
+2
+	
++
+	
 subprocess.run(["echo", str(user_input)], shell=False, check=True)
 VERIFIED — Python re-scanned the patched AST and proved this CWE is gone. The kill switch passed.
 CWE-502 · LINE 10 — Unsafe deserialization via pickle.loads allows arbitrary code execution

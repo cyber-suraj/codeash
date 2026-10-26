@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-26T07:29:09.704Z",
+  "generated_at": "2026-10-26T07:37:36.114Z",
   "app_url": "https://codeash.vercel.app",
   "api_url": "https://codeash-backend.onrender.com",
   "deployment": "vercel-production",
@@ -10,7 +10,7 @@
   "render_preview_label": true,
   "sent_to_render_label": true,
   "fallback_label": true,
-  "audit_elapsed_seconds": 2,
+  "audit_elapsed_seconds": 1,
   "findings": 3,
   "verified": 3,
   "rejected": 0,
@@ -22,12 +22,12 @@
   "desktop": {
     "width": 1440,
     "height": 1400,
-    "bytes": 200728
+    "bytes": 202936
   },
   "mobile": {
     "width": 390,
-    "height": 2663,
-    "bytes": 185152
+    "height": 2694,
+    "bytes": 186763
   },
   "viewport_checks": [
     {

@@ -156,7 +156,7 @@ available. The fallback keeps the audit pipeline useful and honest:
 | API | FastAPI 0.115.6, Uvicorn 0.34.0, Pydantic 2.10.4 |
 | Local model | Ollama 0.4.5 SDK, Gemma 2 9B (`gemma2:9b`) |
 | Static analysis | Python 3.12 `ast`, `re`, `textwrap` |
-| Verification | `unittest` (17 backend tests), Next.js production build, live browser run |
+| Verification | `unittest` (17 backend tests), production build, local + deployed browser runs |
 | Deployment | Live on Vercel + Render; blueprint (`render.yaml`), `vercel.json` |
 
 ---
@@ -345,7 +345,7 @@ Render API using the same headless-Chrome procedure:
 | App URL | <https://codeash.vercel.app> |
 | API | <https://codeash-backend.onrender.com> |
 | Hosting mode | Vercel production + Render free web service |
-| Audit wall-clock time | **2.0 s** (network round trip, fallback engine) |
+| Audit wall-clock time | **1.0 s** (network round trip, fallback engine) |
 | Findings | **3** |
 | Verified by `verify.py` | **3 / 3** |
 | Rejected | **0** |

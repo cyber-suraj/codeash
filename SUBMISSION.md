@@ -105,7 +105,7 @@ and must pass the exact same verification gates.
   console/page errors, 0 external requests
 - Deployed browser run:
   [`live-browser-run.json`](docs/screenshots/live-browser-run.json) — Vercel +
-  Render, **2.0 s**, **3/3 verified**, 0 rejected, fallback providers, only the
+  Render, **1.0 s**, **3/3 verified**, 0 rejected, fallback providers, only the
   Vercel app host and Render API host contacted, 0 unexpected requests, 0
   console/page errors
 - Backend tests: `cd backend && .\venv\Scripts\python.exe -m unittest discover -v`

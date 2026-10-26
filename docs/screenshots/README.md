@@ -47,7 +47,7 @@ class:
 
 | Item | Value |
 | --- | --- |
-| Date (UTC) | 2026-10-26T07:29:09Z |
+| Date (UTC) | 2026-10-26T07:37:36Z |
 | App URL | `https://codeash.vercel.app` |
 | API | `https://codeash-backend.onrender.com` |
 | Deployment | Vercel production + Render free web service |
@@ -59,7 +59,7 @@ class:
 
 | Metric | Value |
 | --- | --- |
-| Audit completed in | **2.0 seconds** |
+| Audit completed in | **1.0 seconds** |
 | Findings | **3** |
 | VERIFIED | **3** |
 | REJECTED | **0** |
