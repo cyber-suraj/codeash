@@ -9,6 +9,19 @@ egress.
 
 ---
 
+## Visual workflow
+
+![CodeAsh animated workflow](docs/screenshots/codeash-workflow.gif)
+
+The animation is an annotated walkthrough built from the real deployed
+screenshots, not a screen recording. It shows the same 3 findings and 3/3
+verified result you will see in Mode A. Full-size captures are in
+[`docs/screenshots/`](docs/screenshots/).
+
+**Static poster:** [`codeash-workflow-poster.png`](docs/screenshots/codeash-workflow-poster.png)
+
+---
+
 ## Mode A — Live cloud preview (about 1 minute)
 
 The hosted deployment is intentionally labelled **CLOUD PREVIEW**. Render does
@@ -115,6 +128,8 @@ deterministic patches instead of crashing.
 
 | Artifact | Location |
 | --- | --- |
+| Animated workflow | [`docs/screenshots/codeash-workflow.gif`](docs/screenshots/codeash-workflow.gif) |
+| Workflow poster | [`docs/screenshots/codeash-workflow-poster.png`](docs/screenshots/codeash-workflow-poster.png) |
 | Local Gemma screenshots | [`docs/screenshots/codeash-desktop.png`](docs/screenshots/codeash-desktop.png), [`codeash-mobile.png`](docs/screenshots/codeash-mobile.png) |
 | Local run report | [`docs/screenshots/browser-run.json`](docs/screenshots/browser-run.json) |
 | Deployed screenshots | [`docs/screenshots/codeash-live-desktop.png`](docs/screenshots/codeash-live-desktop.png), [`codeash-live-mobile.png`](docs/screenshots/codeash-live-mobile.png) |

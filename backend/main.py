@@ -23,7 +23,7 @@ app = FastAPI(
         "LLM proposes, Python disposes. Deterministic AST security scanner + "
         "local Gemma 2 patch verifier."
     ),
-    version="1.0.0",
+    version="1.0.1",
 )
 
 # Local development origins plus preview/production Vercel deployments. A

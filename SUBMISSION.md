@@ -111,6 +111,8 @@ direction.
 ## Demo evidence
 
 - Screenshots: [`docs/screenshots/`](docs/screenshots/)
+- Animated workflow: [`codeash-workflow.gif`](docs/screenshots/codeash-workflow.gif)
+- Workflow poster: [`codeash-workflow-poster.png`](docs/screenshots/codeash-workflow-poster.png)
 - Provenance: [`docs/screenshots/README.md`](docs/screenshots/README.md)
 - Local browser run: [`browser-run.json`](docs/screenshots/browser-run.json) —
   production build, Gemma 2, **42.6 s**, **3/3 verified**, 0 rejected, 0

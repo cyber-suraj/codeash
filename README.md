@@ -17,7 +17,8 @@ fallback mode. For the full zero-egress Gemma 2 experience, run CodeAsh locally
 
 **Live API health:** <https://codeash-backend.onrender.com/health>
 
-**Demo guide:** [`DEMO.md`](DEMO.md) · **Requirements and compliance:**
+**Workflow:** [animated pipeline](#live-workflow) · **Demo guide:**
+[`DEMO.md`](DEMO.md) · **Requirements and compliance:**
 [`REQUIREMENTS.md`](REQUIREMENTS.md)
 
 ---
@@ -97,6 +98,38 @@ here deliberately; overclaiming is how AI security tools lose trust.
 │   │ • Gate 2: Re-run Scanner │                     │ • Fail-safe Mock   │  │
 │   └──────────────────────────┘                     └────────────────────┘  │
 └────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Live workflow
+
+The animation below is built from the real deployed screenshots. It walks
+through the five stages of an audit: input, deterministic AST discovery,
+Gemma 2 or labelled fallback synthesis, the verifier kill switch, and the final
+proof. The cloud preview completes in about a second; local Gemma 2 takes about
+43 seconds on the verified hardware.
+
+![CodeAsh animated workflow — input, AST scan, patch, verify, proof](docs/screenshots/codeash-workflow.gif)
+
+[Static workflow poster](docs/screenshots/codeash-workflow-poster.png) ·
+[Screenshot provenance](docs/screenshots/README.md)
+
+```mermaid
+flowchart LR
+    A["Python source"] --> B["scanner.py<br/>AST + regex"]
+    B --> C{"CWE found?"}
+    C -- "no" --> D["No findings"]
+    C -- "yes" --> E["llm.py<br/>Gemma 2 / fallback"]
+    E --> F["verify.py<br/>ast.parse()"]
+    F --> G{"Target CWE<br/>still present?"}
+    G -- "yes" --> H["REJECTED<br/>never shipped"]
+    G -- "no" --> I["VERIFIED<br/>human review"]
+
+    classDef orange fill:#2a140c,stroke:#FF6B35,color:#EDEDED;
+    classDef green fill:#08221a,stroke:#00C48C,color:#EDEDED;
+    classDef red fill:#2a0d0d,stroke:#FF3B3B,color:#EDEDED;
+    class A,B,E,F orange;
+    class I green;
+    class H red;
 ```
 
 ### The three-stage pipeline
@@ -184,7 +217,7 @@ codeash/
 │   ├── src/app/globals.css  # Dark cyber-physical design system
 │   ├── vercel.json          # Vercel build configuration
 │   └── .env.example         # NEXT_PUBLIC_API_URL
-├── docs/screenshots/        # Local + live browser evidence
+├── docs/screenshots/        # Screenshots, run reports, workflow animation
 ├── render.yaml              # Render backend blueprint
 ├── README.md
 ├── REQUIREMENTS.md          # Event compliance + software requirements
@@ -362,6 +395,24 @@ Render API using the same headless-Chrome procedure:
 | Unexpected external requests | **0** |
 | Console errors / page exceptions | **0 / 0** |
 | Horizontal overflow | none at 320, 390, 768, 1024, 1440px |
+
+### Screenshot gallery
+
+**Deployed cloud preview — 3 VERIFIED, 0 REJECTED:**
+
+| Desktop | Mobile |
+| --- | --- |
+| <img src="docs/screenshots/codeash-live-desktop.png" alt="Deployed CodeAsh audit at 1440px with three verified fallback patches" width="720"> | <img src="docs/screenshots/codeash-live-mobile.png" alt="Deployed CodeAsh audit at 390px" width="260"> |
+
+**Local Gemma 2 — 3 VERIFIED, 0 REJECTED:**
+
+| Desktop | Mobile |
+| --- | --- |
+| <img src="docs/screenshots/codeash-desktop.png" alt="Local CodeAsh audit at 1440px with three verified Gemma 2 patches" width="720"> | <img src="docs/screenshots/codeash-mobile.png" alt="Local CodeAsh audit at 390px" width="260"> |
+
+The animated walkthrough above is built from the deployed screenshots; the
+full-size files and provenance are in
+[`docs/screenshots/`](docs/screenshots/).
 
 ---
 

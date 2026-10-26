@@ -89,6 +89,15 @@ class:
 | `codeash-live-mobile.png` | Deployed audit at 390px |
 | `live-browser-run.json` | Machine-readable deployed run report |
 | `live-browser-run.txt` | Rendered deployed page text captured after the audit |
+| `codeash-workflow.gif` | Animated five-stage workflow built from the deployed screenshots |
+| `codeash-workflow-poster.png` | Static poster frame of the workflow animation |
+
+## Workflow animation
+
+`codeash-workflow.gif` is an annotated animation built from the real deployed
+`codeash-live-workspace.png` and `codeash-live-desktop.png` captures. It is not
+a screen recording; it illustrates the verifier pipeline and uses the same
+3-finding, 3-verified result documented above.
 
 ## Reproduce the local run
 
