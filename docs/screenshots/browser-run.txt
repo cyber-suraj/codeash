@@ -1,0 +1,133 @@
+CODEASH
+AST + GEMMA-2:9B
+LOCAL-FIRST
+
+Private, local security audit before you launch.
+
+GEMMA 2 READY
+SOURCE
+
+LLM PROPOSES. PYTHON DISPOSES.
+
+AST
+GEMMA 2
+PROOF
+NO CLOUD EGRESS
+
+FINDINGS
+
+3
+
+VERIFIED
+
+3
+
+REJECTED
+
+0
+
+CWE CLASSES
+
+3
+
+1 / INPUT CODE
+13 lines · 297 chars
+Sample
+Clear
+python • ast-target.py
+untrusted input, local only
+CWE-78
+shell=True / os.system
+CWE-502
+pickle.load(s)
+CWE-798
+hardcoded secrets
+RUN AUDIT
+Ctrl/⌘ + Enter to scan
+Scan < 100k chars · no code stored
+2 / FINDINGS & FIXES
+3 ISSUES
+CWE-78 · LINE 6 — Command injection via subprocess with shell=True
+GEMMA 2:9B
+The shell=True argument is replaced with shell=False and an argument list is used to execute the command safely.
+1
+	
+	
+-
+	
+subprocess.run(f"echo {user_input}", shell=True)
+
+
+	
+1
+	
++
+	
+import subprocess
+
+
+	
+2
+	
++
+	
+subprocess.run(['echo', f'{user_input}'], shell=False)
+VERIFIED — Python re-scanned the patched AST and proved this CWE is gone. The kill switch passed.
+CWE-502 · LINE 10 — Unsafe deserialization via pickle.loads allows arbitrary code execution
+GEMMA 2:9B
+Replaced pickle.loads with json.loads to prevent deserialization vulnerabilities.
+1
+	
+	
+-
+	
+return pickle.loads(data)
+
+
+	
+1
+	
++
+	
+import json
+
+
+	
+2
+	
++
+	
+return json.loads(data)
+VERIFIED — Python re-scanned the patched AST and proved this CWE is gone. The kill switch passed.
+CWE-798 · LINE 13 — Hardcoded cryptographic secret or credential in 'AWS_SECRET'
+GEMMA 2:9B
+Replaced the hardcoded AWS secret with an environment variable for secure storage.
+1
+	
+	
+-
+	
+AWS_SECRET = "AKIAIOSFODNN7EXAMPLE"
+
+
+	
+1
+	
++
+	
+import os
+
+
+	
+2
+	
++
+	
+AWS_SECRET = os.environ.get('AWS_SECRET', '')
+VERIFIED — Python re-scanned the patched AST and proved this CWE is gone. The kill switch passed.
+Deterministic detectors · fixed CWE allowlist
+verify.py is the final authority
+CODEASH · MIT License · Built for Hacktoberfest 2026 Hack Day (NIAT-ADYPU)
+API: http://localhost:8000
+/
+local engine

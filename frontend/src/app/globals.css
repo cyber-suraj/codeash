@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-panel: #111111;
+  --bg-panel-elevated: #171717;
+  --border-subtle: #262626;
+  --text-primary: #ededed;
+  --text-secondary: #8b8b8b;
+  --accent-orange: #ff6b35;
+  --status-success: #00c48c;
+  --status-danger: #ff3b3b;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 15% 5%, rgba(255, 107, 53, 0.08), transparent 26rem),
+    radial-gradient(circle at 88% 18%, rgba(0, 196, 140, 0.05), transparent 24rem);
+  background-attachment: fixed;
+}
+
+code,
+pre,
+textarea,
+.font-mono {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+}
+
+::selection {
+  background: var(--accent-orange);
+  color: var(--bg-primary);
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d2d2d;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f3f;
+}
+
+.cyber-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+.panel {
+  background:
+    linear-gradient(180deg, rgba(23, 23, 23, 0.62), rgba(17, 17, 17, 0.96)),
+    var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.scan-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 107, 53, 0.85),
+    rgba(0, 196, 140, 0.85),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: scan-sweep 1.8s ease-in-out infinite;
+}
+
+@keyframes scan-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.finding-enter {
+  animation: finding-enter 260ms ease-out both;
+}
+
+@keyframes finding-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.status-dot {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.035);
+}
+
+.diff-viewer table {
+  border-collapse: collapse;
+}
+
+.diff-viewer pre {
+  margin: 0;
+}
+
+textarea::placeholder {
+  color: #555555;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-bar::after,
+  .finding-enter {
+    animation: none;
+  }
+}
