@@ -1,0 +1,87 @@
+{
+  "generated_at": "2026-10-26T07:29:09.704Z",
+  "app_url": "https://codeash.vercel.app",
+  "api_url": "https://codeash-backend.onrender.com",
+  "deployment": "vercel-production",
+  "mode": "cloud-preview",
+  "browser": "Chrome/155.0.8059.85",
+  "engine_pill": "AST + FALLBACK",
+  "cloud_preview_banner": true,
+  "render_preview_label": true,
+  "sent_to_render_label": true,
+  "fallback_label": true,
+  "audit_elapsed_seconds": 2,
+  "findings": 3,
+  "verified": 3,
+  "rejected": 0,
+  "providers": [
+    "fallback",
+    "fallback",
+    "fallback"
+  ],
+  "desktop": {
+    "width": 1440,
+    "height": 1400,
+    "bytes": 200728
+  },
+  "mobile": {
+    "width": 390,
+    "height": 2663,
+    "bytes": 185152
+  },
+  "viewport_checks": [
+    {
+      "requested": 320,
+      "width": 320,
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "bodyScrollWidth": 320
+    },
+    {
+      "requested": 390,
+      "width": 390,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "bodyScrollWidth": 390
+    },
+    {
+      "requested": 768,
+      "width": 768,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "bodyScrollWidth": 768
+    },
+    {
+      "requested": 1024,
+      "width": 1024,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "bodyScrollWidth": 1024
+    },
+    {
+      "requested": 1440,
+      "width": 1440,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "bodyScrollWidth": 1440
+    }
+  ],
+  "request_hosts": [
+    "codeash.vercel.app",
+    "codeash-backend.onrender.com"
+  ],
+  "api_requests": [
+    "https://codeash-backend.onrender.com/health",
+    "https://codeash-backend.onrender.com/scan",
+    "https://codeash-backend.onrender.com/scan"
+  ],
+  "unexpected_requests": [],
+  "console_errors": [],
+  "page_exceptions": [],
+  "log_errors": [],
+  "initial_screenshot": {
+    "width": 1440,
+    "height": 1400,
+    "bytes": 122316
+  }
+}

@@ -75,6 +75,15 @@ class FallbackAndVerifierTests(unittest.TestCase):
             )
         )
 
+    def test_fallback_patches_include_required_imports(self):
+        for original, cwe, module in (
+            ('subprocess.run(cmd, shell=True)', "CWE-78", "subprocess"),
+            ("return pickle.loads(data)", "CWE-502", "json"),
+            ('AWS_SECRET = "AKIAIOSFODNN7EXAMPLE"', "CWE-798", "os"),
+        ):
+            patch = _build_mock_patch(original, cwe)
+            self.assertIn(f"import {module}", patch["fixed_code"])
+
 
 if __name__ == "__main__":
     unittest.main()

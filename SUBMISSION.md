@@ -12,6 +12,10 @@
 
 **Repository:** <https://github.com/cyber-suraj/codeash>
 
+**Live cloud preview:** <https://codeash.vercel.app>
+
+**Live API health:** <https://codeash-backend.onrender.com/health>
+
 **Tracks:** Best Open-Source AI Project · Best Use of Gemma
 
 ---
@@ -22,7 +26,9 @@ CodeAsh turns a natural-language-free security review into a deterministic
 proof. Paste Python; Python's AST engine finds CWE-78, CWE-502, and CWE-798;
 local Gemma 2 (`gemma2:9b`) through Ollama proposes a patch; and a Python
 "kill switch" rejects anything that fails `ast.parse()` or still trips the
-detector on a second scan. No code is sent to a cloud model.
+detector on a second scan. Local mode sends no code to a cloud model. The
+hosted preview is labelled **CLOUD PREVIEW**, sends snippets only to the CodeAsh
+Render backend, and uses the same verifier-approved deterministic fallback.
 
 ## Submission form description
 
@@ -82,7 +88,7 @@ and must pass the exact same verification gates.
 - Ollama 0.4.5, Gemma 2 9B (`gemma2:9b`)
 - Python `ast`, `re`, `textwrap`
 - `react-diff-viewer-continued`, `lucide-react`, `geist`
-- `unittest` (16 backend tests)
+- `unittest` (17 backend tests)
 
 ## AI tools
 
@@ -94,21 +100,41 @@ and must pass the exact same verification gates.
 
 - Screenshots: [`docs/screenshots/`](docs/screenshots/)
 - Provenance: [`docs/screenshots/README.md`](docs/screenshots/README.md)
-- Live browser run: [`browser-run.json`](docs/screenshots/browser-run.json) —
+- Local browser run: [`browser-run.json`](docs/screenshots/browser-run.json) —
   production build, Gemma 2, **42.6 s**, **3/3 verified**, 0 rejected, 0
   console/page errors, 0 external requests
+- Deployed browser run:
+  [`live-browser-run.json`](docs/screenshots/live-browser-run.json) — Vercel +
+  Render, **2.0 s**, **3/3 verified**, 0 rejected, fallback providers, only the
+  Vercel app host and Render API host contacted, 0 unexpected requests, 0
+  console/page errors
 - Backend tests: `cd backend && .\venv\Scripts\python.exe -m unittest discover -v`
 - Frontend checks: `cd frontend && npm run lint && npx tsc --noEmit && npm run build`
 
 ## Deployment
 
-- Backend blueprint: [`render.yaml`](render.yaml) (Render; deterministic
-  fallback when Ollama is unavailable)
-- Frontend configuration: [`frontend/vercel.json`](frontend/vercel.json)
-  (Vercel; set `NEXT_PUBLIC_API_URL` to the Render service URL)
+Live and verified on **2026-10-26**:
 
-Live production URLs will be added here after the deployment credentials and
-services are available. The project is fully runnable locally without them.
+| Component | URL |
+| --- | --- |
+| Frontend | <https://codeash.vercel.app> |
+| Backend | <https://codeash-backend.onrender.com> |
+| Health | <https://codeash-backend.onrender.com/health> |
+| API docs | <https://codeash-backend.onrender.com/docs> |
+
+- **Frontend:** Vercel production, built with
+  `NEXT_PUBLIC_API_URL=https://codeash-backend.onrender.com` in Production,
+  Preview, and Development.
+- **Backend:** Render free web service in Oregon, Python 3.11.9, defined by
+  [`render.yaml`](render.yaml); health check at `/health`.
+- **Cloud mode:** Render has no Ollama runtime, so hosted scans use the
+  verifier-approved deterministic fallback. The UI labels this with
+  `CLOUD PREVIEW`, `RENDER PREVIEW`, and `AST + FALLBACK`.
+- **CORS:** a preflight request from `https://codeash.vercel.app` returns `200`
+  with the matching allow-origin header.
+- **Cold start:** Render's free instance may spin down after idle traffic; the
+  first request can take up to a minute. The project remains fully runnable
+  locally with Gemma 2.
 
 ## Submission checklist
 
@@ -117,9 +143,11 @@ services are available. The project is fully runnable locally without them.
 - [x] Complete README with architecture, setup, and limitations
 - [x] Local Gemma 2 integration verified end to end
 - [x] Deterministic fallback verified without Ollama
-- [x] 16 backend tests pass
+- [x] 17 backend tests pass
 - [x] TypeScript, ESLint, and production build pass
-- [x] Live browser evidence captured
+- [x] Local browser evidence captured with Gemma 2
+- [x] Frontend and backend deployed to Vercel and Render
+- [x] Deployed browser run passes with 3/3 verified fallback patches
 - [x] Responsible-AI and originality disclosure
 - [ ] Final organizer registration and form submission
 - [ ] Participant code review and final eligibility confirmation

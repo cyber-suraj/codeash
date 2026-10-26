@@ -10,7 +10,7 @@ MODEL_NAME = os.getenv("CODEASH_OLLAMA_MODEL", "gemma2:9b")
 
 def _ensure_imports(code: str, cwe: str) -> str:
     """Add the import required by a remediation snippet, once."""
-    required = {"CWE-502": "json", "CWE-798": "os"}.get(cwe)
+    required = {"CWE-78": "subprocess", "CWE-502": "json", "CWE-798": "os"}.get(cwe)
     if not required:
         return code
     pattern = rf"^\s*(?:import\s+{required}\b|from\s+{required}\s+import\b)"

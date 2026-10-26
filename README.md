@@ -11,6 +11,12 @@ Open-Source AI Project** and **Best Use of Gemma**.
 
 **Repository:** <https://github.com/cyber-suraj/codeash>
 
+**Live cloud preview:** <https://codeash.vercel.app> — explicitly labelled
+fallback mode. For the full zero-egress Gemma 2 experience, run CodeAsh locally
+(see [Quickstart](#7-quickstart)).
+
+**Live API health:** <https://codeash-backend.onrender.com/health>
+
 ---
 
 ## 1. The zero-trust AI security manifesto
@@ -119,9 +125,11 @@ available. The fallback keeps the audit pipeline useful and honest:
 
 ## 4. Key features
 
-- **Private by default:** code is scanned in-process and never sent to a cloud
-  API. Local mode requires no API keys, telemetry, CDN assets, or external
-  fonts.
+- **Private by default:** in local mode, code is scanned in-process and never
+  sent to a cloud API. Local mode requires no API keys, telemetry, CDN assets, or
+  external fonts. The hosted preview is labelled **CLOUD PREVIEW** and sends
+  snippets only to the CodeAsh Render backend, which uses the deterministic
+  fallback.
 - **Deterministic verification:** the model cannot override `verify.py`.
 - **Focused diffs:** each finding renders only the vulnerable node and its
   candidate patch.
@@ -148,8 +156,8 @@ available. The fallback keeps the audit pipeline useful and honest:
 | API | FastAPI 0.115.6, Uvicorn 0.34.0, Pydantic 2.10.4 |
 | Local model | Ollama 0.4.5 SDK, Gemma 2 9B (`gemma2:9b`) |
 | Static analysis | Python 3.12 `ast`, `re`, `textwrap` |
-| Verification | `unittest` (16 backend tests), Next.js production build, live browser run |
-| Deployment | Render blueprint (`render.yaml`), Vercel (`vercel.json`) |
+| Verification | `unittest` (17 backend tests), Next.js production build, live browser run |
+| Deployment | Live on Vercel + Render; blueprint (`render.yaml`), `vercel.json` |
 
 ---
 
@@ -172,7 +180,7 @@ codeash/
 │   ├── src/app/globals.css  # Dark cyber-physical design system
 │   ├── vercel.json          # Vercel build configuration
 │   └── .env.example         # NEXT_PUBLIC_API_URL
-├── docs/screenshots/        # Live browser evidence
+├── docs/screenshots/        # Local + live browser evidence
 ├── render.yaml              # Render backend blueprint
 ├── README.md
 ├── SUBMISSION.md
@@ -272,7 +280,7 @@ cd backend
 .\venv\Scripts\python.exe -m unittest discover -v
 ```
 
-Result: **16 tests pass**. The suite covers:
+Result: **17 tests pass**. The suite covers:
 
 - detection of all three CWE classes and exact line numbers
 - clean code and syntax-error handling
@@ -293,7 +301,7 @@ npm run build
 The production build completes with the app route statically prerendered and
 no type or lint errors.
 
-### Live browser run
+### Local browser run (Gemma 2)
 
 A production build (`next start`) was audited with headless Chrome against the
 live local FastAPI backend and the installed `gemma2:9b` model. Evidence is
@@ -320,11 +328,66 @@ Measured result:
 | Console errors / page exceptions | **0 / 0** |
 | External network requests | **0** |
 
+### Deployed cloud preview run (fallback)
+
+The production Vercel frontend was then audited end-to-end against the live
+Render API using the same headless-Chrome procedure:
+
+- [`codeash-live-desktop.png`](docs/screenshots/codeash-live-desktop.png) —
+  three VERIFIED fallback patches at 1440px
+- [`codeash-live-mobile.png`](docs/screenshots/codeash-live-mobile.png) —
+  responsive layout at 390px
+- [`live-browser-run.json`](docs/screenshots/live-browser-run.json) — raw
+  deployment result
+
+| Check | Result |
+| --- | --- |
+| App URL | <https://codeash.vercel.app> |
+| API | <https://codeash-backend.onrender.com> |
+| Hosting mode | Vercel production + Render free web service |
+| Audit wall-clock time | **2.0 s** (network round trip, fallback engine) |
+| Findings | **3** |
+| Verified by `verify.py` | **3 / 3** |
+| Rejected | **0** |
+| Patch providers | **fallback, fallback, fallback** |
+| Honesty labels | `CLOUD PREVIEW`, `RENDER PREVIEW`, `AST + FALLBACK` all present |
+| Network hosts | only `codeash.vercel.app` + `codeash-backend.onrender.com` |
+| Unexpected external requests | **0** |
+| Console errors / page exceptions | **0 / 0** |
+| Horizontal overflow | none at 320, 390, 768, 1024, 1440px |
+
 ---
 
-## 9. Deployment
+## 9. Live deployment
 
-The repository includes deployment configuration for both halves.
+Deployed and verified on **2026-10-26**.
+
+| Component | Live URL | Configuration |
+| --- | --- | --- |
+| Frontend | <https://codeash.vercel.app> | Vercel production, static Next.js |
+| Backend | <https://codeash-backend.onrender.com> | Render free web service, Oregon |
+| Health | <https://codeash-backend.onrender.com/health> | `status: ok` |
+| API docs | <https://codeash-backend.onrender.com/docs> | FastAPI OpenAPI |
+
+Current Render health response:
+
+```json
+{
+  "status": "ok",
+  "engine": "CodeAsh AST + Gemma 2 Verifier",
+  "ollama_connected": false,
+  "model_pulled": false,
+  "model": "fallback-deterministic-mock"
+}
+```
+
+Render does not provide an Ollama runtime, so the hosted deployment uses the
+deterministic fallback. That is the intended zero-crash cloud posture, and the
+UI discloses it with `CLOUD PREVIEW`, `RENDER PREVIEW`, and `AST + FALLBACK`
+labels plus a banner. The Vercel project sets `NEXT_PUBLIC_API_URL` to
+`https://codeash-backend.onrender.com` for Production, Preview, and
+Development. Render's free instance can spin down after idle traffic; the first
+request may take up to a minute while it wakes.
 
 ### Backend — Render
 
@@ -334,10 +397,8 @@ The repository includes deployment configuration for both halves.
 - start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 - Python: `3.11.9`
 
-Deploy through the Render dashboard's **New → Blueprint** flow and point it at
-this repository. Render does not provide Ollama, so the cloud service
-advertises and uses the deterministic fallback. That is the intended
-zero-crash cloud posture.
+The service can also be created by pointing Render's **New → Blueprint** flow at
+this repository. Its health check is `/health`.
 
 ### Frontend — Vercel
 
@@ -346,13 +407,17 @@ cd frontend
 npx vercel --prod
 ```
 
-Set `NEXT_PUBLIC_API_URL` to the deployed Render URL in the Vercel project
-environment before building. The checked-in `vercel.json` leaves the framework
-detection and build command explicit.
+The checked-in `vercel.json` leaves the framework detection and build command
+explicit. The production build was created after the Render URL was configured,
+and the live HTML was verified to contain the Render API URL with no
+`localhost:8000` fallback.
+
+### CORS
 
 The backend CORS policy allows localhost and `*.vercel.app` origins by default.
-For a custom frontend domain, set `CODEASH_ALLOWED_ORIGINS` on Render as a
-comma-separated list.
+A preflight request from `https://codeash.vercel.app` returns `200` with the
+matching `access-control-allow-origin`. For a custom frontend domain, set
+`CODEASH_ALLOWED_ORIGINS` on Render as a comma-separated list.
 
 ---
 
@@ -393,7 +458,8 @@ comma-separated list.
   (NIAT-ADYPU) submission.
 - Initial implementation and documentation were produced with AI-assisted
   development using OpenCode, then reviewed and verified with the automated
-  tests, production build, direct API checks, and live browser run.
+  tests, production build, direct API checks, and local plus deployed browser
+  runs.
 - Gemma 2 is executed locally through Ollama in the primary demo. No cloud
   model provider or API key is required.
 - The demo key `AKIAIOSFODNN7EXAMPLE` is a public AWS documentation example,
@@ -412,6 +478,8 @@ comma-separated list.
 **Tagline:** Private, local security audit before you launch.
 
 **Tracks:** Best Open-Source AI Project · Best Use of Gemma
+
+**Live cloud preview:** <https://codeash.vercel.app>
 
 The complete submission metadata, description, demo checklist, and deployment
 status are maintained in [SUBMISSION.md](SUBMISSION.md).

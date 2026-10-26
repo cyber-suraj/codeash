@@ -6,6 +6,7 @@ import {
   Check,
   CheckCircle2,
   Clipboard,
+  Cloud,
   Code2,
   Cpu,
   Download,
@@ -76,6 +77,8 @@ const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
   /\/$/,
   "",
 );
+
+const IS_LOCAL_API = /^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(API_BASE_URL);
 
 const ENGINE_META: Record<
   EngineState,
@@ -164,8 +167,10 @@ const PIPELINE_STEPS = [
     detail: "Python walks nodes for CWE-78, CWE-502, CWE-798",
   },
   {
-    title: "Local Gemma 2 synthesis",
-    detail: "Ollama proposes a drop-in patch. No cloud egress.",
+    title: IS_LOCAL_API ? "Local Gemma 2 synthesis" : "Verified fallback synthesis",
+    detail: IS_LOCAL_API
+      ? "Ollama proposes a drop-in patch. No cloud egress."
+      : "Deterministic patches when Ollama is unavailable.",
   },
   {
     title: "Kill-switch verification",
@@ -218,8 +223,9 @@ function PipelineLoader({ elapsed }: { elapsed: number }) {
         RUNNING GUARDED AUDIT
       </p>
       <p className="mt-2 max-w-sm font-mono text-xs leading-relaxed text-[#8B8B8B]">
-        AST discovery, local patch synthesis, and mathematical verification are executing in
-        sequence.
+        {IS_LOCAL_API
+          ? "AST discovery, local patch synthesis, and mathematical verification are executing in sequence."
+          : "AST discovery, fallback patch synthesis, and mathematical verification are executing in sequence."}
       </p>
 
       <div className="mt-7 w-full max-w-md space-y-2">
@@ -252,7 +258,11 @@ function PipelineLoader({ elapsed }: { elapsed: number }) {
             <Timer className="h-3 w-3" />
             {elapsed}s elapsed
           </span>
-          <span>Local inference may take 20–90s on first load</span>
+          <span>
+            {IS_LOCAL_API
+              ? "Local inference may take 20–90s on first load"
+              : "Fallback synthesis resolves in under a second"}
+          </span>
         </div>
       </div>
     </div>
@@ -294,8 +304,9 @@ function EmptyState({ hasScanned }: { hasScanned: boolean }) {
         AWAITING AUDIT
       </p>
       <p className="mt-2 max-w-md font-mono text-xs leading-relaxed text-[#8B8B8B]">
-        Paste untrusted Python, select RUN AUDIT, and CodeAsh will scan the AST locally. No patch
-        receives a green badge until Python proves it.
+        {IS_LOCAL_API
+          ? "Paste untrusted Python, select RUN AUDIT, and CodeAsh will scan the AST locally. No patch receives a green badge until Python proves it."
+          : "Paste Python, select RUN AUDIT, and the Render backend will scan its AST. No patch receives a green badge until Python proves it."}
       </p>
       <div className="mt-6 grid w-full max-w-md grid-cols-1 gap-2 text-left sm:grid-cols-3">
         {[
@@ -384,7 +395,9 @@ export default function CodeAshDashboard() {
   const buildReport = useCallback(() => {
     return {
       project: "CodeAsh",
-      tagline: "Private, local security audit before you launch.",
+      tagline: IS_LOCAL_API
+        ? "Private, local security audit before you launch."
+        : "Cloud preview of the local-first security auditor.",
       generated_at: new Date().toISOString(),
       engine: model,
       source_file: SAMPLE_NAME,
@@ -497,7 +510,7 @@ export default function CodeAshDashboard() {
       const message =
         err instanceof Error
           ? err.message
-          : "Unable to reach the local FastAPI backend on port 8000.";
+          : `Unable to reach the audit backend at ${API_BASE_URL}.`;
       setErrorMsg(message);
     } finally {
       setIsLoading(false);
@@ -540,15 +553,27 @@ export default function CodeAshDashboard() {
                   CODEASH
                 </h1>
                 <span className="rounded border border-[#262626] bg-[#171717] px-2 py-0.5 font-mono text-[10px] tracking-wider text-[#8B8B8B]">
-                  AST + GEMMA-2:9B
+                  {IS_LOCAL_API ? "AST + GEMMA-2:9B" : "AST + FALLBACK"}
                 </span>
-                <span className="hidden items-center gap-1 rounded border border-[#00C48C]/30 bg-[#00C48C]/[0.06] px-2 py-0.5 font-mono text-[10px] tracking-wider text-[#00C48C] sm:flex">
-                  <LockKeyhole className="h-3 w-3" />
-                  LOCAL-FIRST
+                <span
+                  className={`hidden items-center gap-1 rounded border px-2 py-0.5 font-mono text-[10px] tracking-wider sm:flex ${
+                    IS_LOCAL_API
+                      ? "border-[#00C48C]/30 bg-[#00C48C]/[0.06] text-[#00C48C]"
+                      : "border-[#FF6B35]/30 bg-[#FF6B35]/[0.06] text-[#FF6B35]"
+                  }`}
+                >
+                  {IS_LOCAL_API ? (
+                    <LockKeyhole className="h-3 w-3" />
+                  ) : (
+                    <Cloud className="h-3 w-3" />
+                  )}
+                  {IS_LOCAL_API ? "LOCAL-FIRST" : "CLOUD PREVIEW"}
                 </span>
               </div>
               <p className="mt-1 font-mono text-[11px] text-[#8B8B8B]">
-                Private, local security audit before you launch.
+                {IS_LOCAL_API
+                  ? "Private, local security audit before you launch."
+                  : "Cloud preview of the local-first security auditor."}
               </p>
             </div>
           </div>
@@ -614,18 +639,33 @@ export default function CodeAshDashboard() {
             </span>
             <span className="flex items-center gap-1.5 rounded border border-[#262626] bg-[#0A0A0A] px-2 py-1">
               <Cpu className="h-3 w-3 text-[#FF6B35]" />
-              GEMMA 2
+              {IS_LOCAL_API ? "GEMMA 2" : "FALLBACK"}
             </span>
             <span className="flex items-center gap-1.5 rounded border border-[#262626] bg-[#0A0A0A] px-2 py-1">
               <ShieldCheck className="h-3 w-3 text-[#00C48C]" />
               PROOF
             </span>
             <span className="hidden items-center gap-1.5 rounded border border-[#262626] bg-[#0A0A0A] px-2 py-1 sm:flex">
-              <LockKeyhole className="h-3 w-3 text-[#00C48C]" />
-              NO CLOUD EGRESS
+              {IS_LOCAL_API ? (
+                <LockKeyhole className="h-3 w-3 text-[#00C48C]" />
+              ) : (
+                <Cloud className="h-3 w-3 text-[#FF6B35]" />
+              )}
+              {IS_LOCAL_API ? "NO CLOUD EGRESS" : "RENDER PREVIEW"}
             </span>
           </div>
         </section>
+
+        {!IS_LOCAL_API && (
+          <section className="flex items-start gap-2.5 rounded-md border border-[#FF6B35]/30 bg-[#FF6B35]/[0.06] px-4 py-3 font-mono text-[10px] leading-relaxed text-[#FF6B35]">
+            <Cloud className="mt-0.5 h-4 w-4 shrink-0" />
+            <p>
+              <span className="font-semibold">CLOUD PREVIEW</span> — this deployment sends the
+              submitted snippet to the Render API and uses verifier-approved deterministic fallback
+              patches. Run CodeAsh locally with Ollama for zero-egress Gemma 2 synthesis.
+            </p>
+          </section>
+        )}
 
         {hasScanned && (
           <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -677,8 +717,12 @@ export default function CodeAshDashboard() {
               <div className="mb-2 flex items-center justify-between font-mono text-[10px] text-[#8B8B8B]">
                 <span>python • {SAMPLE_NAME}</span>
                 <span className="flex items-center gap-1">
-                  <LockKeyhole className="h-3 w-3 text-[#00C48C]" />
-                  untrusted input, local only
+                  {IS_LOCAL_API ? (
+                    <LockKeyhole className="h-3 w-3 text-[#00C48C]" />
+                  ) : (
+                    <Cloud className="h-3 w-3 text-[#FF6B35]" />
+                  )}
+                  {IS_LOCAL_API ? "untrusted input, local only" : "untrusted input · sent to Render"}
                 </span>
               </div>
 
@@ -893,7 +937,13 @@ export default function CodeAshDashboard() {
           <span className="flex flex-wrap items-center gap-2">
             <span>API: {API_BASE_URL}</span>
             <span className="text-[#262626]">/</span>
-            <span>{engine === "offline" ? "offline demo" : "local engine"}</span>
+            <span>
+              {engine === "offline"
+                ? "offline"
+                : IS_LOCAL_API
+                  ? "local engine"
+                  : "Render backend"}
+            </span>
           </span>
         </footer>
       </main>
