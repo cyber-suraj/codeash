@@ -14,6 +14,9 @@ from verify import verify_patch
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("codeash")
 
+# Render injects RENDER_GIT_COMMIT at build/runtime; local runs report "local".
+REVISION = os.getenv("RENDER_GIT_COMMIT", "local")[:7]
+
 app = FastAPI(
     title="CodeAsh Local Security Audit Engine",
     description=(
@@ -100,6 +103,7 @@ def root():
         "tagline": "Private, local security audit before you launch.",
         "docs": "/docs",
         "health": "/health",
+        "revision": REVISION,
     }
 
 
@@ -112,6 +116,7 @@ def health_check():
         "ollama_connected": connected,
         "model_pulled": model_pulled,
         "model": MODEL_NAME if model_pulled else "fallback-deterministic-mock",
+        "revision": REVISION,
     }
 
 
