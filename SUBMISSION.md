@@ -96,6 +96,18 @@ and must pass the exact same verification gates.
 - OpenCode for AI-assisted implementation, reviewed and verified by the
   participant
 
+## Team and contributions
+
+**Team name:** Solo — Suraj Balasaheb Khanase
+
+**Team size:** 1 participant
+
+**Participant and contribution:** Suraj Balasaheb Khanase — project concept,
+security requirements, environment setup, local Gemma 2 verification, cloud
+deployment, live-run verification, and submission preparation. Implementation
+and documentation were produced with disclosed AI assistance under participant
+direction.
+
 ## Demo evidence
 
 - Screenshots: [`docs/screenshots/`](docs/screenshots/)
@@ -136,6 +148,40 @@ Live and verified on **2026-10-26**:
   first request can take up to a minute. The project remains fully runnable
   locally with Gemma 2.
 
+## Originality and pre-existing work
+
+- CodeAsh was created for this submission in a new public repository:
+  <https://github.com/cyber-suraj/codeash>.
+- The participant's earlier Workshop Planning Agent repository is a separate
+  project and is not included in this submission.
+- The implementation and documentation were produced with disclosed AI
+  assistance; the disclosure is repeated in the Responsible AI statement and
+  README §11.
+- No undisclosed third-party project template or copied source code was added.
+  Third-party dependencies remain under their upstream licenses.
+- The sample credential is the public AWS documentation example
+  `AKIAIOSFODNN7EXAMPLE`, not a real secret.
+
+## Security and privacy
+
+- Submitted Python is parsed, never imported, evaluated, or executed.
+- Candidate patches are parsed and re-scanned, never executed.
+- The API does not write submitted source to disk; logs are limited to CWE,
+  line, provider, and verification status.
+- Requests are bounded to 1–100,000 characters and validated by Pydantic.
+- CORS is an explicit localhost/Vercel allowlist, not a credentialed wildcard.
+- Local mode performs no network egress beyond the loopback backend.
+- The hosted preview sends snippets only to the CodeAsh Render backend and
+  discloses that flow in the UI. Render has no Ollama runtime and uses the
+  labelled deterministic fallback.
+
+## Requirements and compliance
+
+The event compliance matrix, software and functional requirements, and
+repository structure are documented in [REQUIREMENTS.md](REQUIREMENTS.md). The
+judge-facing demo script is in [DEMO.md](DEMO.md), and conduct expectations are
+in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
 ## Submission checklist
 
 - [x] Public source repository
@@ -149,8 +195,14 @@ Live and verified on **2026-10-26**:
 - [x] Frontend and backend deployed to Vercel and Render
 - [x] Deployed browser run passes with 3/3 verified fallback patches
 - [x] Responsible-AI and originality disclosure
+- [x] Team size and contribution documented
+- [x] Security and privacy review
+- [x] Requirements and compliance matrix
+- [x] Demo guide and Code of Conduct
+- [ ] Confirm the solo entry complies with the announced team-size limit
 - [ ] Final organizer registration and form submission
 - [ ] Participant code review and final eligibility confirmation
+- [ ] Submission completed before the announced deadline
 
 ## Responsible AI statement
 

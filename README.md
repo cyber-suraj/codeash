@@ -17,6 +17,9 @@ fallback mode. For the full zero-egress Gemma 2 experience, run CodeAsh locally
 
 **Live API health:** <https://codeash-backend.onrender.com/health>
 
+**Demo guide:** [`DEMO.md`](DEMO.md) · **Requirements and compliance:**
+[`REQUIREMENTS.md`](REQUIREMENTS.md)
+
 ---
 
 ## 1. The zero-trust AI security manifesto
@@ -173,7 +176,8 @@ codeash/
 │   ├── test_api.py          # API contract, limits, fallback tests
 │   ├── test_pipeline.py     # Scanner, fallback, verifier tests
 │   ├── requirements.txt     # Runtime dependencies
-│   └── requirements-dev.txt # Test dependencies
+│   ├── requirements-dev.txt # Test dependencies
+│   └── .env.example         # Optional backend configuration
 ├── frontend/
 │   ├── src/app/page.tsx     # Audit console, stats, findings, JSON export
 │   ├── src/app/layout.tsx   # Metadata and self-hosted Geist fonts
@@ -183,7 +187,10 @@ codeash/
 ├── docs/screenshots/        # Local + live browser evidence
 ├── render.yaml              # Render backend blueprint
 ├── README.md
-├── SUBMISSION.md
+├── REQUIREMENTS.md          # Event compliance + software requirements
+├── SUBMISSION.md            # Event-facing submission record
+├── DEMO.md                  # Judge-facing demo guide
+├── CODE_OF_CONDUCT.md       # Conduct expectations
 ├── CONTRIBUTING.md
 ├── LICENSE                  # MIT
 └── .gitignore
@@ -483,6 +490,24 @@ matching `access-control-allow-origin`. For a custom frontend domain, set
 
 The complete submission metadata, description, demo checklist, and deployment
 status are maintained in [SUBMISSION.md](SUBMISSION.md).
+
+---
+
+## 13. Event compliance and governance
+
+- [Requirements and compliance matrix](REQUIREMENTS.md) — event checks,
+  software prerequisites, functional requirements, and repository structure.
+- [Demo guide](DEMO.md) — live cloud-preview walkthrough and local Gemma 2 run.
+- [Submission record](SUBMISSION.md) — description, disclosures, deployment, and
+  final checklist.
+- [Code of Conduct](CODE_OF_CONDUCT.md) — expected behavior and reporting.
+- [Contributing](CONTRIBUTING.md) — development, detector, and AI-contribution
+  rules.
+
+Eligibility, official registration, team-size confirmation, the submission
+deadline, and judging instructions remain the participant's responsibility.
+The organizer's published instructions take precedence over this repository's
+checklist.
 
 ---
 
